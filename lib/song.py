@@ -11,12 +11,12 @@ class Song:
         self.artist = artist
         self.genre = genre
         
-        # Increment song count and add to tracking
-        self.add_song_to_count()
-        self.add_to_genres()
-        self.add_to_artists()
-        self.add_to_genre_count()
-        self.add_to_artist_count()
+        # Add to tracking lists and counts
+        Song.add_song_to_count()
+        Song.add_to_genres(genre)
+        Song.add_to_artists(artist)
+        Song.add_to_genre_count(genre)
+        Song.add_to_artist_count(artist)
 
     @classmethod
     def add_song_to_count(cls):
@@ -24,52 +24,29 @@ class Song:
         cls.count += 1
 
     @classmethod
-    def add_to_genres(cls):
-        """Update the genres list with unique genres"""
-        # This method will be called from __init__, but we'll handle duplicates in the property
-        pass
+    def add_to_genres(cls, genre):
+        """Add genre to genres list if not already present"""
+        if genre not in cls.genres:
+            cls.genres.append(genre)
 
     @classmethod
-    def add_to_artists(cls):
-        """Update the artists list with unique artists"""
-        # This method will be called from __init__, but we'll handle duplicates in the property
-        pass
+    def add_to_artists(cls, artist):
+        """Add artist to artists list if not already present"""
+        if artist not in cls.artists:
+            cls.artists.append(artist)
 
     @classmethod
-    def add_to_genre_count(cls, genre=None):
+    def add_to_genre_count(cls, genre):
         """Update the genre count histogram"""
-        # This will be handled by the property, but we need to initialize it
-        pass
+        if genre in cls.genre_count:
+            cls.genre_count[genre] += 1
+        else:
+            cls.genre_count[genre] = 1
 
     @classmethod
-    def add_to_artist_count(cls, artist=None):
+    def add_to_artist_count(cls, artist):
         """Update the artist count histogram"""
-        # This will be handled by the property, but we need to initialize it
-        pass
-
-    # Using properties to handle the derived attributes
-    @property
-    def genres(self):
-        """Return unique genres from all songs"""
-        return list(set(self.__class__.genres))
-    
-    @property
-    def artists(self):
-        """Return unique artists from all songs"""
-        return list(set(self.__class__.artists))
-    
-    @property
-    def genre_count(self):
-        """Return count of songs by genre"""
-        count_dict = {}
-        for genre in self.__class__.genres:
-            count_dict[genre] = count_dict.get(genre, 0) + 1
-        return count_dict
-    
-    @property
-    def artist_count(self):
-        """Return count of songs by artist"""
-        count_dict = {}
-        for artist in self.__class__.artists:
-            count_dict[artist] = count_dict.get(artist, 0) + 1
-        return count_dict
+        if artist in cls.artist_count:
+            cls.artist_count[artist] += 1
+        else:
+            cls.artist_count[artist] = 1
